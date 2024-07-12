@@ -17,8 +17,8 @@ const ChatbotButton = () => {
 
     return (
         <>
-            <Fab 
-                color="primary" 
+            <Fab
+                sx={{ bgcolor: '#36ab2b', color: '36ab2b', '&:hover': { bgcolor: '#3DE77D' }}}
                 aria-label="chat"
                 style={{
                     position: 'fixed',
@@ -36,9 +36,9 @@ const ChatbotButton = () => {
                 toggleDrawer={toggleDrawer}
                 content={
                     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-                        <AppBar position="static">
+                        <AppBar position="static" sx={{ bgcolor: '#36ab2b' }}>
                             <Toolbar>
-                                <Typography variant="h6">
+                                <Typography variant="h6" component="div">
                                     Chatbot
                                 </Typography>
                             </Toolbar>
