@@ -16,7 +16,7 @@ export const LoginPost= async (data,url) => {
 export const PeticionGet = async (key, url) => {
     const headers = {
         "Content-Type": "application/json",
-        "X-API-TOKEN": key
+        "x-api-token": key
     };
     const datos = await (await fetch(`${URL_BACKEND}/${url}`, {
         method: "GET",
@@ -27,7 +27,7 @@ export const PeticionGet = async (key, url) => {
 export const PeticionPost = async (key, url,data) => {
     const headers = {
         "Content-Type": "application/json",
-        "X-API-TOKEN": key
+        "x-api-token": key
     };
     const datos = await (await fetch(`${URL_BACKEND}/${url}`, {
         method: "POST",

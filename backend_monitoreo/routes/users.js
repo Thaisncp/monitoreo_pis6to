@@ -22,7 +22,7 @@ var auth = function middleware(req, res, next) {
   const token = req.headers['x-api-token'];
   if (token) {
     require('dotenv').config();
-    const llave = process.env.KEY;
+    const llave = process.env.KEY_SQ;
 
     jwt.verify(token, llave, async (err, decoded) => {
       if (err) {
@@ -70,11 +70,11 @@ router.post('/persona/admin', [
   body('nombres', 'Ingrese sus nombres').trim().exists().not().isEmpty().isLength({ min: 3, max: 50 }).withMessage("Ingrese un valor mayor o igual a 3 y menor a 50"),
 ],personaController.guardarAdmin);
 router.post('/persona/modificar', personaController.modificar);
-router.get('/persona/listar', personaController.listar);
-router.get('/persona/aceptado', personaController.listarAceptado);
-router.get('/persona/espera', personaController.listarEspera);
-router.get('/persona/rechazado', personaController.listarRechazado);
-router.get('/persona/obtener/:external', personaController.obtener);
+router.get('/persona/listar', auth, personaController.listar);
+router.get('/persona/aceptado', auth, personaController.listarAceptado);
+router.get('/persona/espera', auth , personaController.listarEspera);
+router.get('/persona/rechazado', auth, personaController.listarRechazado);
+router.get('/persona/obtener/:external', auth, personaController.obtener);
 /*CUENTA CONTROLLER */
 router.post('/cuenta/sesion', [
   body('correo', 'Ingrese un correo').trim().exists().not().isEmpty().isEmail(),
@@ -91,4 +91,5 @@ router.get('/datos/humedadSemana', datosController.listarHumedadSemana);
 router.get('/datos/humedadDia', datosController.listarHumedadDia);
 router.get('/datos/co2Semana', datosController.listarCo2Semana);
 router.get('/datos/co2Dia', datosController.listarCo2Dia);
+router.get('/datos', auth, datosController.listarDatos);
 module.exports = router;

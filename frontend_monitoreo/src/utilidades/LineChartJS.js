@@ -13,7 +13,6 @@ import {
     Legend,
     Filler,
 } from 'chart.js';
-import { getToken } from './Sessionutil';
 
 ChartJS.register(
     CategoryScale,
@@ -28,7 +27,6 @@ ChartJS.register(
 
 export default function LineChartJS({ data, dispositivos, nombreFoto }) {
     const chartRef = useRef(null);
-    const token = getToken();
     const generarDatosYOptions = (dataDispositivo) => {
         const midata = {
             labels: dataDispositivo.listacolumna1.datos,
@@ -64,11 +62,8 @@ export default function LineChartJS({ data, dispositivos, nombreFoto }) {
 
     return (
         <div className="flex-fill w-100">
-            {/** {token && <div className="shadow-lg w-100 p-2 mb-2">
-              <ExportOptions chartRef={chartRef} nombreFoto={nombreFoto} data={data.data} />
-            </div>}*/}
             <div className="shadow-lg flex-fill w-100 mb-2" ref={chartRef}>
-                <h5 className="texto-primario-h3 mb-0">GRAFICAS SEMANALES</h5>
+                <h5 className="texto-primario-h3 mb-0">GRAFICAS DE DATOS DIARIAS Y SEMANALES</h5>
                 {data.dataPorDispositivos && Object.values(data.dataPorDispositivos).map((dataDispositivo, index) => {
                     const { midata, misoptions } = generarDatosYOptions(dataDispositivo);
                     return (
@@ -77,16 +72,17 @@ export default function LineChartJS({ data, dispositivos, nombreFoto }) {
                             <div className="card-body d-flex w-100 p-4">
                                 <Line data={midata} options={misoptions} />
                             </div>
-                            <div className='p-4'>
-                                <div className="shadow-lg w-100 p-2 mb-2 ">
-                                    <ExportOptions chartRef={chartRef} nombreFoto={nombreFoto} data={dataDispositivo} />
-                                </div>
-                            </div>
-
                         </div>
                     );
                 })}
             </div>
+            <h5 className="texto-primario-h3 mb-0">EXPORTAR DATOS SEMANALES</h5>
+            <div className='p-4'>
+                <div className="shadow-lg w-100 p-2 mb-2 ">
+                    <ExportOptions chartRef={chartRef} nombreFoto={nombreFoto} />
+                </div>
+            </div>
         </div>
+
     );
 }

@@ -4,12 +4,14 @@ import { PeticionGet } from '../hooks/Conexion';
 import CambiarEstado from './CambiarEstado';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Modal } from 'react-bootstrap';
+import { getToken } from '../utilidades/Sessionutil';
 
 const Usuarios = () => {
   const [usuarios, setUsuarios] = useState([]);
   const [filtro, setFiltro] = useState('aceptado');
   const [selectedUsuario, setSelectedUsuario] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const token = getToken();
 
   useEffect(() => {
     const fetchUsuarios = async () => {
@@ -23,11 +25,11 @@ const Usuarios = () => {
             url = 'persona/espera';
             break;
           case 'rechazado':
-            url = 'persona/rechazado'; // Agregamos la opción para listar usuarios rechazados
+            url = 'persona/rechazado';
             break;
           default:
-            const aceptados = await PeticionGet('', 'persona/aceptado');
-            const enEspera = await PeticionGet('', 'persona/espera');
+            const aceptados = await PeticionGet(token, 'persona/aceptado');
+            const enEspera = await PeticionGet(token, 'persona/espera');
             const rechazados = usuarios.filter(
               (usuario) =>
                 !aceptados.info.some(
@@ -40,7 +42,7 @@ const Usuarios = () => {
             setUsuarios(rechazados);
             return;
         }
-        const data = await PeticionGet('', url);
+        const data = await PeticionGet(token, url);
         setUsuarios(data.info);
       } catch (error) {
         console.error(error);

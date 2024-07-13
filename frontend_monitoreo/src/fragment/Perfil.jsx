@@ -12,11 +12,12 @@ const Perfil = () => {
     const [userProfileData, setUserProfileData] = useState([]);
     const [showModal, setShowModal] = useState(false); // Estado para controlar la visibilidad del modal
     const external = getExternal();
+    const token = getToken();
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await PeticionGet(getToken(), `persona/obtener/${external}`);
+                const response = await PeticionGet(token, `persona/obtener/${external}`);
                 if (response.code === 200) {
                     setUserProfileData([response.info]);
                 } else {

@@ -1,12 +1,34 @@
 var models = require('../models/');
 var datoRecolectado = models.datoRecolectado;
 const { Op } = require('sequelize');
-class DatosController {
+class DatosController {   
 
+    async listarDatos(req, res) {
+        try {
+            const fechaInicio = new Date();
+            fechaInicio.setDate(fechaInicio.getDate() - 8); // Resta 8 días
+    
+            const { count, rows } = await datoRecolectado.findAndCountAll({
+                attributes: ['dato', 'fecha', 'hora', 'external_id', 'id_sensor'],
+                where: {
+                    fecha: {
+                        [Op.gte]: fechaInicio.toISOString().slice(0, 10) // Últimos 8 días
+                    }
+                },
+                order: [['fecha', 'DESC'], ['hora', 'DESC']]
+            });
+    
+            res.json({ msg: 'OK!', code: 200, info: rows, total: count });
+        } catch (error) {
+            console.error('Error al listar datos:', error);
+            res.status(500).json({ msg: 'Error al listar datos', code: 500 });
+        }
+    }    
+    
     async listarTemperaturaSemana(req, res) {
         try {
             const endDate = new Date();
-            const startDate = new Date(endDate); 
+            const startDate = new Date(endDate);
             startDate.setDate(startDate.getDate() - 7);
 
             const listar = await datoRecolectado.findAll({
@@ -14,7 +36,7 @@ class DatosController {
                 where: {
                     id_sensor: 2,
                     fecha: {
-                        [Op.between]: [startDate, endDate] 
+                        [Op.between]: [startDate, endDate]
                     }
                 },
             });
@@ -51,7 +73,7 @@ class DatosController {
     async listarHumedadSemana(req, res) {
         try {
             const endDate = new Date();
-            const startDate = new Date(endDate); 
+            const startDate = new Date(endDate);
             startDate.setDate(startDate.getDate() - 7);
 
             const listar = await datoRecolectado.findAll({
@@ -59,7 +81,7 @@ class DatosController {
                 where: {
                     id_sensor: 1,
                     fecha: {
-                        [Op.between]: [startDate, endDate] 
+                        [Op.between]: [startDate, endDate]
                     }
                 },
             });
@@ -95,7 +117,7 @@ class DatosController {
     async listarCo2Semana(req, res) {
         try {
             const endDate = new Date();
-            const startDate = new Date(endDate); 
+            const startDate = new Date(endDate);
             startDate.setDate(startDate.getDate() - 7);
 
             const listar = await datoRecolectado.findAll({
@@ -103,7 +125,7 @@ class DatosController {
                 where: {
                     id_sensor: 3,
                     fecha: {
-                        [Op.between]: [startDate, endDate] 
+                        [Op.between]: [startDate, endDate]
                     }
                 },
             });
