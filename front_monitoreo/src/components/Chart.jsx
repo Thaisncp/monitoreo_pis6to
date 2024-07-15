@@ -1,14 +1,23 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { createChart, ColorType } from 'lightweight-charts';
+import { PeticionGetSinToken } from '../hooks/Conexion';
 
-const ChartComponent = ({ data, title, color }) => {
+const ChartComponent = ({ title, color, uri }) => {
     const chartContainerRef = useRef();
+    const [data, setData] = useState([]);
 
     useEffect(() => {
-        const handleResize = () => {
-            chart.applyOptions({ width: chartContainerRef.current.clientWidth });
-        };
+        PeticionGetSinToken(uri).then(response => {
+            const formattedData = response.info.map(item => ({
+                time: new Date(`${item.fecha}T${item.hora}:00`).getTime() / 1000,
+                value: parseFloat(item.dato),
+            })).sort((a, b) => a.time - b.time);
 
+            setData(formattedData);
+        });
+    }, [uri]);
+
+    useEffect(() => {
         const chart = createChart(chartContainerRef.current, {
             layout: {
                 background: { type: ColorType.Solid, color: '#ffffff' },
@@ -43,6 +52,10 @@ const ChartComponent = ({ data, title, color }) => {
         });
 
         newSeries.setData(data);
+
+        const handleResize = () => {
+            chart.applyOptions({ width: chartContainerRef.current.clientWidth });
+        };
 
         window.addEventListener('resize', handleResize);
 

@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Box, TextField, Button, Typography, Paper } from '@mui/material';
+import { Box, TextField, Button, Typography, Paper, IconButton } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import PersonIcon from '@mui/icons-material/Person';
 import AndroidIcon from '@mui/icons-material/Android';
-import { getBotResponse } from './BotResponse';
+import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
+import { PeticionPostSinToken } from '../hooks/Conexion';
 
 const Chatbot = () => {
     const [messages, setMessages] = useState([]);
@@ -25,16 +26,20 @@ const Chatbot = () => {
 
     useEffect(scrollToBottom, [messages]);
 
-    const handleSend = () => {
+    const handleSend = async () => {
         if (input.trim() !== '') {
             const newMessage = { text: input, sender: 'user' };
             setMessages(prevMessages => [...prevMessages, newMessage]);
 
-            const botResponse = getBotResponse(input);
-            setTimeout(() => {
-                const botMessage = { text: botResponse, sender: 'bot' };
+            try {
+                const response = await PeticionPostSinToken('chatbot', { message: input });
+                const botMessage = { text: response.response, sender: 'bot' };
                 setMessages(prevMessages => [...prevMessages, botMessage]);
-            }, 500);
+            } catch (error) {
+                console.error('Error getting bot response:', error);
+                const errorMessage = { text: 'Lo siento, hubo un error al procesar tu mensaje.', sender: 'bot' };
+                setMessages(prevMessages => [...prevMessages, errorMessage]);
+            }
 
             setInput('');
         }
@@ -44,8 +49,26 @@ const Chatbot = () => {
         return sender === 'user' ? <PersonIcon /> : <AndroidIcon />;
     }
 
+    const handleClearChat = () => {
+        localStorage.removeItem('chatMessages');
+        setMessages([]);
+    }
+
     return (
         <Box sx={{ height: '90vh', display: 'flex', flexDirection: 'column' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', p: 1 }}>
+                <IconButton 
+                    onClick={handleClearChat}
+                    sx={{ 
+                        color: '#36ab2b',
+                        '&:hover': {
+                            bgcolor: 'rgba(54, 171, 43, 0.1)',
+                        },
+                    }}
+                >
+                    <DeleteSweepIcon />
+                </IconButton>
+            </Box>
             <Paper elevation={3} sx={{ flex: 1, overflowY: 'auto', p: 2 }}>
                 {messages.map((message, index) => (
                     <Box key={index} sx={{ display: 'flex', justifyContent: message.sender === 'user' ? 'flex-end' : 'flex-start', mb: 1 }}>
@@ -98,7 +121,6 @@ const Chatbot = () => {
             </Box>
         </Box>
     );
-
 }
 
 export default Chatbot;

@@ -3,7 +3,7 @@ import BarraMenu from "./BarraMenu";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ValoresSensores from '../components/ValoresSensores';
 import ChartComponent from '../components/Chart';
-import { tempData, humidityData, co2Data } from '../components/data';
+// import { tempData, humidityData, co2Data } from '../components/data';
 import { Tooltip, IconButton, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import DrawerIndicador from '../components/DrawerIndicator';
@@ -29,13 +29,13 @@ const Principal = () => {
     const getChartData = () => {
         switch (selectedChart) {
             case 'temperatura':
-                return { title: "TEMPERATURA", data: tempData, color: "#FFD800" };
+                return { title: "TEMPERATURA" , color: "#FFD800", uri: "datos/temperaturaDia" };
             case 'humedad':
-                return { title: "HUMEDAD", data: humidityData, color: "#0070FF" };
+                return { title: "HUMEDAD", color: "#0070FF", uri: "datos/humedadDia"};
             case 'co2':
-                return { title: "CO2", data: co2Data, color: "#1300FF" };
+                return { title: "CO2", color: "#1300FF", uri: "datos/co2Dia"};
             default:
-                return { title: "TEMPERATURA", data: tempData, color: "#FFD800" };
+                return { title: "TEMPERATURA", color: "#FFD800", uri: "datos/temperaturaDia"};
         }
     };
 
@@ -69,7 +69,7 @@ const Principal = () => {
                 </div>
                 <div className="d-flex flex-column align-items-center mt-5">
                     <strong className="mb-3">Indicador actual de la calidad del aire:</strong>
-                    <Indicador nivel="Crítico" />
+                    <Indicador/>
                 </div>
                 <div className="row mt-4 w-100 justify-content-center">
                     <ValoresSensores />

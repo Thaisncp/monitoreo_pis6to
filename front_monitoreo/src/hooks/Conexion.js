@@ -24,6 +24,30 @@ export const PeticionGet = async (key, url) => {
     })).json();
     return datos;
 }
+
+export const PeticionGetSinToken = async (url) => {
+    const headers = {
+        "Content-Type": "application/json",
+    };
+    const datos = await (await fetch(`${URL_BACKEND}/${url}`, {
+        method: "GET",
+        headers: headers,
+    })).json();
+    return datos;
+}
+
+export const PeticionPostSinToken = async (url, data) => {
+    const headers = {
+        "Content-Type": "application/json",
+    };
+    const datos = await (await fetch(`${URL_BACKEND}/${url}`, {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify(data),
+    })).json();
+    return datos;
+}
+
 export const PeticionPost = async (key, url,data) => {
     const headers = {
         "Content-Type": "application/json",

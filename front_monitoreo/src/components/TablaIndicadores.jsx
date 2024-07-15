@@ -1,5 +1,6 @@
 import React from 'react';
 import '../index.css';
+import * as metricas from './constantes/metricas';
 export const Indicadores = () => {
     return (
         <div className="d-flex flex-column justify-content-center">
@@ -17,27 +18,27 @@ export const Indicadores = () => {
                 <tbody>
                     <tr>
                         <td>Óptimo</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td>{metricas.TEMPERATURA_OPTIMA}°C</td>
+                        <td>{metricas.HUMEDAD_OPTIMA}%</td>
+                        <td>{metricas.CO2_OPTIMO} ppm </td>
                     </tr>
                     <tr>
                         <td>Aceptable</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td>{metricas.TEMPERATURA_ACEPTABLE}°C</td>
+                        <td>{metricas.HUMEDAD_ACEPTABLE}%</td>
+                        <td>{metricas.CO2_ACEPTABLE} ppm</td>
                     </tr>
                     <tr>
                         <td>Deficiente</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td>{metricas.TEMPERATURA_DEFICIENTE}°C</td>
+                        <td>{metricas.HUMEDAD_DEFICIENTE}%</td>
+                        <td>{metricas.CO2_DEFICIENTE} ppm</td>
                     </tr>
                     <tr>
                         <td>Crítico</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td>{metricas.TEMPERATURA_CRITICA}°C</td>
+                        <td>{metricas.HUMEDAD_CRITICA}%</td>
+                        <td>{metricas.CO2_CRITICO} ppm</td>
                     </tr>
                 </tbody>
             </table>
