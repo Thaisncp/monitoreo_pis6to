@@ -45,7 +45,7 @@ const Historial = () => {
 
   const handleFechaSeleccionada = (date) => {
     setFechaSeleccionada(date); // Actualizar la fecha seleccionada
-    setPaginaActual(1); // Reiniciar la página actual al seleccionar una nueva fecha
+    setPaginaActual(1); // Reiniciar la página actual al seleccionar una nueva fecha jajaj
   };
 
   const agruparDatos = (datos) => {
