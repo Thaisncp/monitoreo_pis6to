@@ -73,7 +73,7 @@ const NavLink = ({ classNameNav, handleShowModal }) => {
             {token && (<Nav.Link href="/perfil" style={navLinkStyle}><i className="fas fa-user"></i> Perfil</Nav.Link>)}
             {token && (<Nav.Link href="/graficas" style={navLinkStyle}><i class="fas fa-chart-column"></i> Gráficas</Nav.Link>)}
             {rolA === 'ADMINISTRADOR' && <Nav.Link href="/usuarios" style={navLinkStyle}><i className="fas fa-users"></i> Usuarios</Nav.Link>}
-            {!token && (
+            {!token && (<Nav.Link href="/historial" style={navLinkStyle}><i class="fas fa-folder-open"></i> Historial</Nav.Link>)}
                 <li className="nav-item dropdown" onClick={toggleDropdown}>
                     <span className="nav-link" style={navLinkStyle}><i className="fas fa-user-circle"></i> Mi cuenta</span>
                     <ul className={`dropdown-menu ${showDropdown ? 'show' : ''}`}>
@@ -81,7 +81,7 @@ const NavLink = ({ classNameNav, handleShowModal }) => {
                         <Nav.Link href="/iniciar-sesion" className="dropdown-item" style={navLinkStyle}><i className="fas fa-sign-in-alt"></i> Iniciar sesión</Nav.Link>
                     </ul>
                 </li>
-            )}
+            
             {token && <Nav.Link href="/" onClick={handleCerrarSesion} style={navLinkStyle}><i className="fas fa-sign-out-alt"></i> Cerrar sesión</Nav.Link>}
         </Nav>
     );
