@@ -92,4 +92,6 @@ router.get('/datos/humedadDia', datosController.listarHumedadDia);
 router.get('/datos/co2Semana', datosController.listarCo2Semana);
 router.get('/datos/co2Dia', datosController.listarCo2Dia);
 router.get('/datos', auth, datosController.listarDatos);
+router.get('/datosBusqueda', auth, datosController.listarDatosBusqueda);
 module.exports = router;
+

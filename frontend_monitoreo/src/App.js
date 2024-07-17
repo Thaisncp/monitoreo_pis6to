@@ -5,6 +5,8 @@ import Graficas from './fragment/Graficas';
 import Principal from './fragment/Principal';
 import Usuarios from './fragment/Usuarios';
 import Perfil from './fragment/Perfil';
+import Historial from './fragment/Historial';
+
 
 function App() {
   return (
@@ -14,6 +16,7 @@ function App() {
         <Route path='/graficas' element={<Graficas/>} />
         <Route path='/usuarios' element={<Usuarios/>}/>
         <Route path='/perfil' element={<Perfil/>}/>
+        <Route path='/historial' element={<Historial/>}/>
     </Routes>
   );
 }

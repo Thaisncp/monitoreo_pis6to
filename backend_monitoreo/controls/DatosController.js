@@ -159,5 +159,41 @@ class DatosController {
         }
     }
 
+    async listarDatosBusqueda(req, res) {
+        try {
+            const { pagina = 1, items = 20, fecha } = req.query;
+            const itemsPorPagina = items * 3; // 20 filas * 3 sensores = 60 elementos
+            const offset = (pagina - 1) * itemsPorPagina;
+    
+            let whereCondition = {};
+    
+            if (fecha) {
+                const startDate = new Date(fecha);
+                const endDate = new Date(startDate);
+                endDate.setDate(startDate.getDate() + 1); // Incrementar la fecha en un día
+    
+                whereCondition = {
+                    fecha: {
+                        [Op.gte]: startDate.toISOString().slice(0, 10),
+                        [Op.lt]: endDate.toISOString().slice(0, 10)
+                    }
+                };
+            }
+    
+            const { count, rows } = await datoRecolectado.findAndCountAll({
+                attributes: ['dato', 'fecha', 'hora', 'external_id', 'id_sensor'],
+                where: whereCondition,
+                order: [['fecha', 'DESC'], ['hora', 'DESC']],
+                offset: offset,
+                limit: itemsPorPagina
+            });
+    
+            res.json({ msg: 'OK!', code: 200, info: rows, total: count });
+        } catch (error) {
+            console.error('Error al listar datos:', error);
+            res.status(500).json({ msg: 'Error al listar datos', code: 500 });
+        }
+    }
+
 }
 module.exports = DatosController;
