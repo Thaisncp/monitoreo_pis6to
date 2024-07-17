@@ -170,7 +170,7 @@ const Registro = () => {
                                                             <input type="password" className="form-control" placeholder="Clave" {...register('clave', {
                                                                 required: true,
                                                                 minLength: 7,
-                                                                pattern: /^(?=.*[A-Z])(?=.*\d).*$/ // Al menos una letra mayúscula y un número
+                                                                pattern: /^(?=.*[A-Z])(?=.*\d).*$/ // Para la contraseña Al menos una letra mayúscula y un número
                                                             })} />
                                                         </div>
                                                         {errors.clave && errors.clave.type === 'required' && <div className='alert alert-danger'>Ingrese una clave</div>}

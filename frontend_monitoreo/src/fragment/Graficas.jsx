@@ -145,16 +145,17 @@ const MapComponent = () => {
                     <>
                         <tr>
                             <td>Altas Temperaturas</td>
-                            <td className='text-center'> --- </td>
+                            <td className='text-center'> Mayor a 28 °C </td>
                         </tr>
                         <tr>
                             <td>Temperatura Normal</td>
-                            <td className='text-center'> --- </td>
+                            <td className='text-center'> Entre 16 - 28 °C </td>
                         </tr>
                         <tr>
                             <td>Bajas Temperaturas</td>
-                            <td className='text-center'> --- </td>
+                            <td className='text-center'> Menor a 16 °C </td>
                         </tr>
+
                     </>
                 );
             case 'dispositivo2':
@@ -162,16 +163,17 @@ const MapComponent = () => {
                     <>
                         <tr>
                             <td>Humedad Alta</td>
-                            <td className='text-center'> --- </td>
+                            <td className='text-center'> Mayor a 70% </td>
                         </tr>
                         <tr>
                             <td>Humedad Normal</td>
-                            <td className='text-center'> --- </td>
+                            <td className='text-center'> Entre 30% - 70% </td>
                         </tr>
                         <tr>
                             <td>Ambiente Seco</td>
-                            <td className='text-center'> --- </td>
+                            <td className='text-center'> Menor a 30% </td>
                         </tr>
+
                     </>
                 );
             case 'dispositivo3':
@@ -179,15 +181,15 @@ const MapComponent = () => {
                     <>
                         <tr>
                             <td>Aire Puro</td>
-                            <td className='text-center'> --- </td>
+                            <td className='text-center'> Menor a 600 ppm </td>
                         </tr>
                         <tr>
                             <td>Moderada Cantidad de Gases</td>
-                            <td className='text-center'> --- </td>
+                            <td className='text-center'> Entre 600 - 1000 ppm </td>
                         </tr>
                         <tr>
                             <td>Alta Cantidad de Gases</td>
-                            <td className='text-center'> --- </td>
+                            <td className='text-center'> Mayor a 1000 ppm </td>
                         </tr>
                     </>
                 );
@@ -220,7 +222,7 @@ const MapComponent = () => {
                                         </div>
                                     </div>
                                     {Object.keys(dataGraficaDiaActual.dataPorDispositivos).map((dispositivoKey, index) => (
-                                        <div key={index} style={{marginBottom: "350px", marginTop: "100px"}}>
+                                        <div key={index} style={{ marginBottom: "350px", marginTop: "100px" }}>
                                             <h3 className="texto-primario-h3">{dataGraficaDiaActual.dataPorDispositivos[dispositivoKey].nombre}</h3>
                                             <div className="crud shadow-lg p-3 mb-5 bg-body rounded" style={{ display: 'flex', flexDirection: 'column' }}>
                                                 <div className="col">
