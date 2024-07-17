@@ -64,7 +64,6 @@ const MapComponent = () => {
                 // Procesar datos de Temperatura
                 const temperaturaData = responseTemperatura.info.map(dato => ({
                     fecha: dato.fecha,
-                    hora: dato.hora,
                     dato: dato.dato
                 }));
                 setDataGraficaDiaActual(prevState => ({
@@ -74,7 +73,7 @@ const MapComponent = () => {
                         dispositivo1: {
                             ...prevState.dataPorDispositivos.dispositivo1,
                             listacolumna1: {
-                                datos: temperaturaData.map(d => filtro === 'dia' ? d.hora : d.fecha)
+                                datos: temperaturaData.map(d => d.fecha)
                             },
                             listacolumna2: {
                                 ...prevState.dataPorDispositivos.dispositivo1.listacolumna2,
@@ -87,7 +86,6 @@ const MapComponent = () => {
                 // Procesar datos de Humedad
                 const humedadData = responseHumedad.info.map(dato => ({
                     fecha: dato.fecha,
-                    hora: dato.hora,
                     dato: dato.dato
                 }));
                 setDataGraficaDiaActual(prevState => ({
@@ -97,7 +95,7 @@ const MapComponent = () => {
                         dispositivo2: {
                             ...prevState.dataPorDispositivos.dispositivo2,
                             listacolumna1: {
-                                datos: humedadData.map(d => filtro === 'dia' ? d.hora : d.fecha)
+                                datos: humedadData.map(d => d.fecha)
                             },
                             listacolumna2: {
                                 ...prevState.dataPorDispositivos.dispositivo2.listacolumna2,
@@ -110,7 +108,6 @@ const MapComponent = () => {
                 // Procesar datos de CO2
                 const co2Data = responseCO2.info.map(dato => ({
                     fecha: dato.fecha,
-                    hora: dato.hora,
                     dato: dato.dato
                 }));
                 setDataGraficaDiaActual(prevState => ({
@@ -120,7 +117,7 @@ const MapComponent = () => {
                         dispositivo3: {
                             ...prevState.dataPorDispositivos.dispositivo3,
                             listacolumna1: {
-                                datos: co2Data.map(d => filtro === 'dia' ? d.hora : d.fecha)
+                                datos: co2Data.map(d => d.fecha)
                             },
                             listacolumna2: {
                                 ...prevState.dataPorDispositivos.dispositivo3.listacolumna2,
@@ -137,66 +134,6 @@ const MapComponent = () => {
 
         fetchData();
     }, [filtro]); // Dependencia de useEffect: filtro
-
-    const renderClasificacion = (dispositivoKey) => {
-        switch (dispositivoKey) {
-            case 'dispositivo1':
-                return (
-                    <>
-                        <tr>
-                            <td>Altas Temperaturas</td>
-                            <td className='text-center'> Mayor a 28 °C </td>
-                        </tr>
-                        <tr>
-                            <td>Temperatura Normal</td>
-                            <td className='text-center'> Entre 16 - 28 °C </td>
-                        </tr>
-                        <tr>
-                            <td>Bajas Temperaturas</td>
-                            <td className='text-center'> Menor a 16 °C </td>
-                        </tr>
-
-                    </>
-                );
-            case 'dispositivo2':
-                return (
-                    <>
-                        <tr>
-                            <td>Humedad Alta</td>
-                            <td className='text-center'> Mayor a 70% </td>
-                        </tr>
-                        <tr>
-                            <td>Humedad Normal</td>
-                            <td className='text-center'> Entre 30% - 70% </td>
-                        </tr>
-                        <tr>
-                            <td>Ambiente Seco</td>
-                            <td className='text-center'> Menor a 30% </td>
-                        </tr>
-
-                    </>
-                );
-            case 'dispositivo3':
-                return (
-                    <>
-                        <tr>
-                            <td>Aire Puro</td>
-                            <td className='text-center'> Menor a 600 ppm </td>
-                        </tr>
-                        <tr>
-                            <td>Moderada Cantidad de Gases</td>
-                            <td className='text-center'> Entre 600 - 1000 ppm </td>
-                        </tr>
-                        <tr>
-                            <td>Alta Cantidad de Gases</td>
-                            <td className='text-center'> Mayor a 1000 ppm </td>
-                        </tr>
-                    </>
-                );
-            default:
-                return null;
-        }
-    };
 
     return (
         <div>
@@ -222,7 +159,7 @@ const MapComponent = () => {
                                         </div>
                                     </div>
                                     {Object.keys(dataGraficaDiaActual.dataPorDispositivos).map((dispositivoKey, index) => (
-                                        <div key={index} style={{ marginBottom: "350px", marginTop: "100px" }}>
+                                        <div key={index}>
                                             <h3 className="texto-primario-h3">{dataGraficaDiaActual.dataPorDispositivos[dispositivoKey].nombre}</h3>
                                             <div className="crud shadow-lg p-3 mb-5 bg-body rounded" style={{ display: 'flex', flexDirection: 'column' }}>
                                                 <div className="col">
@@ -235,7 +172,18 @@ const MapComponent = () => {
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                {renderClasificacion(dispositivoKey)}
+                                                                <tr>
+                                                                    <td>BUENO</td>
+                                                                    <td className='text-center'> --- </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>REGULADOR</td>
+                                                                    <td className='text-center'> --- </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>MALO</td>
+                                                                    <td className='text-center'> --- </td>
+                                                                </tr>
                                                             </tbody>
                                                         </table>
                                                     </div>

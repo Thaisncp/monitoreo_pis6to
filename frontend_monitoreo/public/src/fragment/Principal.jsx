@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import BarraMenu from "./BarraMenu";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import ValoresSensores from '../fragment/ValoresSensores';
-import ChartComponent from '../fragment/Chart';
+import ValoresSensores from '../components/ValoresSensores';
+import ChartComponent from '../components/Chart';
 // import { tempData, humidityData, co2Data } from '../components/data';
 import { Tooltip, IconButton, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import DrawerIndicador from '../fragment/DrawerIndicator';
-import { Indicadores } from '../fragment/TablaIndicadores';
-import { Indicador } from '../fragment/Indicador';
+import DrawerIndicador from '../components/DrawerIndicator';
+import { Indicadores } from '../components/TablaIndicadores';
+import { Indicador } from '../components/Indicador';
 
 const Principal = () => {
 
