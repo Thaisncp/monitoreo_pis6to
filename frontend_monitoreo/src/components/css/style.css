@@ -42,6 +42,7 @@
   padding: 2px;
   color: var(--azul);
 }
+
 .card {
   background-color: rgba(255, 255, 255, 0.5) !important; /* Color blanco semi-transparente */
   /*backdrop-filter: blur(10px) !important; /* Efecto de desenfoque */
@@ -283,20 +284,19 @@ header {
 }
 
 /* Estilos para los servicios */
+
+/* style.css */
 .services {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
   margin-left: 50px;
-  /* Agrega un espacio lateral */
   margin-right: 50px;
-  /* Agrega un espacio lateral */
 }
 
 .service {
   position: relative;
-  /* Posición relativa para que los íconos sean absolutos dentro de este div */
-  flex-basis: calc(33.33% - 20px);
+  flex-basis: calc(25% - 20px); /* Ajuste para que entren 4 cards en una fila */
   background-color: #fff;
   padding: 20px;
   margin-bottom: 20px;
@@ -306,7 +306,6 @@ header {
   margin-right: 2px;
   margin-bottom: 30px;
   border-radius: 20px;
-  /* Redondea las esquinas */
 }
 
 .service h3 {
@@ -316,7 +315,6 @@ header {
   color: var(--verde);
 }
 
-/* luchini */
 .service h4 {
   font-size: 1.2rem;
   margin-top: 5px;
@@ -334,8 +332,8 @@ header {
   font-size: 1rem;
   color: var(--negro);
   text-align: justify;
-  /* Añade justificación al texto */
 }
+
 
 /* Estilos para el encabezado */
 .navbar-fondo,

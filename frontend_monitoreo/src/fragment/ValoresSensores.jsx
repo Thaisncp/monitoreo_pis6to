@@ -3,8 +3,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import GaugeChart from 'react-gauge-chart';
 import { PeticionGetSinToken } from '../hooks/Conexion';
 import { TIMEREFETCHING } from '../utilidades/constantes/refetching';
+
 const ValoresSensores = () => {
-    const [isLoading, setIsLoading] = useState(true);
+    const [isFirstLoad, setIsFirstLoad] = useState(true);
     const [data, setData] = useState({ temperatura: null, humedad: null, co2: null });
 
     useEffect(() => {
@@ -17,7 +18,9 @@ const ValoresSensores = () => {
                     co2: parseFloat(co2.dato),
                 };
                 setData(newData);
-                setIsLoading(false);
+                if (isFirstLoad) {
+                    setIsFirstLoad(false);
+                }
             });
         };
 
@@ -26,7 +29,7 @@ const ValoresSensores = () => {
         const interval = setInterval(fetchData, TIMEREFETCHING);
 
         return () => clearInterval(interval);
-    }, []);
+    }, [isFirstLoad]);
 
     const gaugeProps = {
         nrOfLevels: 20,
@@ -44,7 +47,7 @@ const ValoresSensores = () => {
 
     return (
         <div className="d-flex flex-row justify-content-center align-items-center mb-4">
-            {isLoading ? (
+            {isFirstLoad ? (
                 <div className="text-center w-100">
                     <div className="spinner-border" role="status">
                         <span className="visually-hidden">Loading...</span>
@@ -59,7 +62,7 @@ const ValoresSensores = () => {
                             id="gauge-temperatura"
                             percent={data.temperatura}
                             colors={gaugeColors.temperatura}
-                            formatTextValue={(value) => `${data.temperatura.toFixed(2)}°`}
+                            formatTextValue={(value) => `${data.temperatura.toFixed(2)}°C`}
                         />
                     </div>
                     <div className="text-center m-2">
