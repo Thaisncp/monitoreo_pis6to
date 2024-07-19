@@ -8,16 +8,31 @@ const ChartComponent = ({ title, color, uri }) => {
 
     useEffect(() => {
         PeticionGetSinToken(uri).then(response => {
-            const formattedData = response.info.map(item => ({
+            const rawData = response.info.map(item => ({
                 time: new Date(`${item.fecha}T${item.hora}:00`).getTime() / 1000,
                 value: parseFloat(item.dato),
-            })).sort((a, b) => a.time - b.time);
+            }));
 
-            setData(formattedData);
+            const aggregatedData = rawData.reduce((acc, curr) => {
+                const existing = acc.find(item => item.time === curr.time);
+                if (existing) {
+                    existing.value = (existing.value + curr.value) / 2; // Averaging the values
+                } else {
+                    acc.push(curr);
+                }
+                return acc;
+            }, []);
+
+            const sortedData = aggregatedData.sort((a, b) => a.time - b.time);
+
+            console.log('Formatted and sorted data:', sortedData);
+            setData(sortedData);
         });
     }, [uri]);
 
     useEffect(() => {
+        if (data.length === 0) return;
+
         const chart = createChart(chartContainerRef.current, {
             layout: {
                 background: { type: ColorType.Solid, color: '#ffffff' },

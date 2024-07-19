@@ -5,7 +5,7 @@ import { PeticionGetSinToken } from '../hooks/Conexion';
 import { TIMEREFETCHING } from '../utilidades/constantes/refetching';
 
 const ValoresSensores = () => {
-    const [isFirstLoad, setIsFirstLoad] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
     const [data, setData] = useState({ temperatura: null, humedad: null, co2: null });
 
     useEffect(() => {
@@ -13,14 +13,12 @@ const ValoresSensores = () => {
             PeticionGetSinToken('/datos/ultimosDatos').then(response => {
                 const { temperatura, humedad, co2 } = response.info;
                 const newData = {
-                    temperatura: parseFloat(temperatura.dato),
-                    humedad: parseFloat(humedad.dato),
-                    co2: parseFloat(co2.dato),
+                    temperatura: Math.max(0, Math.min(1, parseFloat(temperatura.dato) / 100)), // Clamping and converting to range 0-1
+                    humedad: Math.max(0, Math.min(1, parseFloat(humedad.dato) / 100)),       // Clamping and converting to range 0-1
+                    co2: Math.max(0, Math.min(1, parseFloat(co2.dato) / 100)),               // Clamping and converting to range 0-1
                 };
                 setData(newData);
-                if (isFirstLoad) {
-                    setIsFirstLoad(false);
-                }
+                setIsLoading(false);
             });
         };
 
@@ -29,14 +27,16 @@ const ValoresSensores = () => {
         const interval = setInterval(fetchData, TIMEREFETCHING);
 
         return () => clearInterval(interval);
-    }, [isFirstLoad]);
+    }, []);
 
     const gaugeProps = {
-        nrOfLevels: 20,
+        nrOfLevels: 100,
         arcsLength: [0.3, 0.5, 0.2],
         arcPadding: 0.02,
         cornerRadius: 3,
         textColor: '#000000',
+        animate: false, // Disable animation
+        needleTransition: 'none', // Disable needle transition animation
     };
 
     const gaugeColors = {
@@ -47,7 +47,7 @@ const ValoresSensores = () => {
 
     return (
         <div className="d-flex flex-row justify-content-center align-items-center mb-4">
-            {isFirstLoad ? (
+            {isLoading ? (
                 <div className="text-center w-100">
                     <div className="spinner-border" role="status">
                         <span className="visually-hidden">Loading...</span>
@@ -62,7 +62,7 @@ const ValoresSensores = () => {
                             id="gauge-temperatura"
                             percent={data.temperatura}
                             colors={gaugeColors.temperatura}
-                            formatTextValue={(value) => `${data.temperatura.toFixed(2)}°C`}
+                            formatTextValue={() => `${(data.temperatura * 100).toFixed(2)}°`} // Convert back to original scale
                         />
                     </div>
                     <div className="text-center m-2">
@@ -72,7 +72,7 @@ const ValoresSensores = () => {
                             id="gauge-humedad"
                             percent={data.humedad}
                             colors={gaugeColors.humedad}
-                            formatTextValue={(value) => `${data.humedad.toFixed(2)}%`}
+                            formatTextValue={() => `${(data.humedad * 100).toFixed(2)}%`} // Convert back to original scale
                         />
                     </div>
                     <div className="text-center m-2">
@@ -82,7 +82,7 @@ const ValoresSensores = () => {
                             id="gauge-co2"
                             percent={data.co2}
                             colors={gaugeColors.co2}
-                            formatTextValue={(value) => `${data.co2.toFixed(2)} ppm`}
+                            formatTextValue={() => `${(data.co2 * 100).toFixed(2)} ppm`} // Convert back to original scale
                         />
                     </div>
                 </div>
