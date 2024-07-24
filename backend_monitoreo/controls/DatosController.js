@@ -49,12 +49,30 @@ class DatosController {
 
     async listarTemperaturaDia(req, res) {
         try {
-            const id_sensor = 2; // ID del sensor de temperatura
-            const fechaActual = new Date(); // Fecha actual
-            fechaActual.setDate(fechaActual.getDate() - 1); // Restar un día
-
-            const fecha = fechaActual.toISOString().slice(0, 10); // Formato YYYY-MM-DD
-
+            const id_sensor = 2; // ID del sensor de humedad
+    
+            // Obtener la fecha del último dato registrado
+            const ultimoDato = await datoRecolectado.findOne({
+                attributes: ['fecha'],
+                where: { id_sensor },
+                order: [['fecha', 'DESC']],
+                limit: 1
+            });
+    
+            if (!ultimoDato) {
+                return res.status(404).json({ msg: 'No se encontraron datos para el sensor especificado.', code: 404 });
+            }
+    
+            // Verificar el tipo de fecha y convertir si es necesario
+            let fechaUltimoDato = ultimoDato.fecha;
+            if (typeof fechaUltimoDato === 'string') {
+                fechaUltimoDato = new Date(fechaUltimoDato);
+            }
+    
+            const fecha = fechaUltimoDato.toISOString().slice(0, 10); // Formato YYYY-MM-DD
+            console.log("Fecha del último dato: " + fecha);
+    
+            // Obtener todos los datos del día del último dato registrado
             const listar = await datoRecolectado.findAll({
                 attributes: ['dato', 'fecha', 'hora', 'external_id'],
                 where: {
@@ -62,14 +80,14 @@ class DatosController {
                     fecha
                 },
             });
-
+    
             res.json({ msg: 'OK!', code: 200, info: listar });
         } catch (error) {
-            console.error('Error al listar datos de Temperatura por día:', error);
-            res.status(500).json({ msg: 'Error al listar datos de Temperatura por día', code: 500 });
+            console.error('Error al listar datos de Humedad por día:', error);
+            res.status(500).json({ msg: 'Error al listar datos de Humedad por día', code: 500 });
         }
     }
-
+    
     async listarHumedadSemana(req, res) {
         try {
             const endDate = new Date();
@@ -94,12 +112,30 @@ class DatosController {
 
     async listarHumedadDia(req, res) {
         try {
-            const id_sensor = 1; // ID del sensor de temperatura
-            const fechaActual = new Date(); // Fecha actual
-            fechaActual.setDate(fechaActual.getDate() - 1); // Restar un día
-
-            const fecha = fechaActual.toISOString().slice(0, 10); // Formato YYYY-MM-DD
-
+            const id_sensor = 1; // ID del sensor de humedad
+    
+            // Obtener la fecha del último dato registrado
+            const ultimoDato = await datoRecolectado.findOne({
+                attributes: ['fecha'],
+                where: { id_sensor },
+                order: [['fecha', 'DESC']],
+                limit: 1
+            });
+    
+            if (!ultimoDato) {
+                return res.status(404).json({ msg: 'No se encontraron datos para el sensor especificado.', code: 404 });
+            }
+    
+            // Verificar el tipo de fecha y convertir si es necesario
+            let fechaUltimoDato = ultimoDato.fecha;
+            if (typeof fechaUltimoDato === 'string') {
+                fechaUltimoDato = new Date(fechaUltimoDato);
+            }
+    
+            const fecha = fechaUltimoDato.toISOString().slice(0, 10); // Formato YYYY-MM-DD
+            console.log("Fecha del último dato: " + fecha);
+    
+            // Obtener todos los datos del día del último dato registrado
             const listar = await datoRecolectado.findAll({
                 attributes: ['dato', 'fecha', 'hora', 'external_id'],
                 where: {
@@ -107,13 +143,14 @@ class DatosController {
                     fecha
                 },
             });
-
+    
             res.json({ msg: 'OK!', code: 200, info: listar });
         } catch (error) {
-            console.error('Error al listar datos de Temperatura por día:', error);
-            res.status(500).json({ msg: 'Error al listar datos de Temperatura por día', code: 500 });
+            console.error('Error al listar datos de Humedad por día:', error);
+            res.status(500).json({ msg: 'Error al listar datos de Humedad por día', code: 500 });
         }
-    }
+    }    
+    
     async listarCo2Semana(req, res) {
         try {
             const endDate = new Date();
@@ -138,12 +175,30 @@ class DatosController {
 
     async listarCo2Dia(req, res) {
         try {
-            const id_sensor = 3; // ID del sensor de temperatura
-            const fechaActual = new Date(); // Fecha actual
-            fechaActual.setDate(fechaActual.getDate() - 1); // Restar un día
-
-            const fecha = fechaActual.toISOString().slice(0, 10); // Formato YYYY-MM-DD
-
+            const id_sensor = 3; // ID del sensor de humedad
+    
+            // Obtener la fecha del último dato registrado
+            const ultimoDato = await datoRecolectado.findOne({
+                attributes: ['fecha'],
+                where: { id_sensor },
+                order: [['fecha', 'DESC']],
+                limit: 1
+            });
+    
+            if (!ultimoDato) {
+                return res.status(404).json({ msg: 'No se encontraron datos para el sensor especificado.', code: 404 });
+            }
+    
+            // Verificar el tipo de fecha y convertir si es necesario
+            let fechaUltimoDato = ultimoDato.fecha;
+            if (typeof fechaUltimoDato === 'string') {
+                fechaUltimoDato = new Date(fechaUltimoDato);
+            }
+    
+            const fecha = fechaUltimoDato.toISOString().slice(0, 10); // Formato YYYY-MM-DD
+            console.log("Fecha del último dato: " + fecha);
+    
+            // Obtener todos los datos del día del último dato registrado
             const listar = await datoRecolectado.findAll({
                 attributes: ['dato', 'fecha', 'hora', 'external_id'],
                 where: {
@@ -151,11 +206,11 @@ class DatosController {
                     fecha
                 },
             });
-
+    
             res.json({ msg: 'OK!', code: 200, info: listar });
         } catch (error) {
-            console.error('Error al listar datos de Temperatura por día:', error);
-            res.status(500).json({ msg: 'Error al listar datos de Temperatura por día', code: 500 });
+            console.error('Error al listar datos de Humedad por día:', error);
+            res.status(500).json({ msg: 'Error al listar datos de Humedad por día', code: 500 });
         }
     }
 
@@ -195,8 +250,6 @@ class DatosController {
         }
     }
 
-    // metodo para obtener los ultimos datos tanto de temperatura, humedad y co2
-    // es solo el ultimo dato que se ha recolectado
     async obtenerUltimosDatos(req, res) {
         try {
             const temperatura = await datoRecolectado.findOne({
@@ -235,10 +288,8 @@ class DatosController {
             const { message } = req.body;
             let response = "";
 
-            // Función para verificar si el mensaje contiene ciertas palabras clave
             const contienePalabras = (msg, palabras) => palabras.some(palabra => msg.toLowerCase().includes(palabra));
 
-            // Palabras clave para cada tipo de dato
             const palabrasTemperatura = ['temperatura', 'calor', 'frío', 'grados'];
             const palabrasHumedad = ['humedad', 'húmedo', 'seco'];
             const palabrasCO2 = ['co2', 'dióxido de carbono', 'aire'];
@@ -326,6 +377,71 @@ class DatosController {
         return data ? data.dato : 'N/A';
     }
 
+    async PromedioDiario(req, res) {
+        try {
+            // Obtener la fecha del último registro
+            const ultimoRegistro = await datoRecolectado.findOne({
+                attributes: [
+                    [datoRecolectado.sequelize.fn('MAX', datoRecolectado.sequelize.col('fecha')), 'fecha']
+                ],
+                raw: true
+            });
+    
+            if (!ultimoRegistro || !ultimoRegistro.fecha) {
+                return res.status(404).json({ msg: 'No hay datos disponibles', code: 404 });
+            }
+    
+            const fechaUltimoRegistro = ultimoRegistro.fecha;
+            
+            // Calcular promedio para cada sensor en la fecha del último registro
+            const [promedioTemperatura, promedioHumedad, promedioCo2] = await Promise.all([
+                datoRecolectado.findOne({
+                    attributes: [
+                        [datoRecolectado.sequelize.fn('AVG', datoRecolectado.sequelize.col('dato')), 'promedio']
+                    ],
+                    where: {
+                        id_sensor: 2, // temperatura
+                        fecha: fechaUltimoRegistro
+                    },
+                    raw: true
+                }),
+                datoRecolectado.findOne({
+                    attributes: [
+                        [datoRecolectado.sequelize.fn('AVG', datoRecolectado.sequelize.col('dato')), 'promedio']
+                    ],
+                    where: {
+                        id_sensor: 1, // humedad
+                        fecha: fechaUltimoRegistro
+                    },
+                    raw: true
+                }),
+                datoRecolectado.findOne({
+                    attributes: [
+                        [datoRecolectado.sequelize.fn('AVG', datoRecolectado.sequelize.col('dato')), 'promedio']
+                    ],
+                    where: {
+                        id_sensor: 3, // co2
+                        fecha: fechaUltimoRegistro
+                    },
+                    raw: true
+                })
+            ]);
+    
+            res.json({
+                msg: 'OK!',
+                code: 200,
+                info: {
+                    temperatura: promedioTemperatura ? promedioTemperatura.promedio : 'N/A',
+                    humedad: promedioHumedad ? promedioHumedad.promedio : 'N/A',
+                    co2: promedioCo2 ? promedioCo2.promedio : 'N/A'
+                }
+            });
+        } catch (error) {
+            console.error('Error al obtener promedio diario:', error);
+            res.status(500).json({ msg: 'Error al obtener promedio diario', code: 500 });
+        }
+    }
+    
 
 }
 module.exports = DatosController;

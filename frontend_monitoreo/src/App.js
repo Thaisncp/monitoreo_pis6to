@@ -7,6 +7,7 @@ import Usuarios from './fragment/Usuarios';
 import Perfil from './fragment/Perfil';
 import Historial from './fragment/Historial';
 import { Conocenos } from './fragment/Conocenos';
+import Sensores from './fragment/Sensores';
 import Layout from './layout';
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
         <Route path='/perfil' element={<Perfil />} />
         <Route path='/historial' element={<Historial />} />
         <Route path='/conocenos' element={<Conocenos />} />
+        <Route path='/sensores' element={<Sensores />} />
       </Routes>
     </Layout>
   );

@@ -3,15 +3,26 @@ import BarraMenu from './BarraMenu';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { PeticionGet } from '../hooks/Conexion';
 import { getToken } from '../utilidades/Sessionutil';
-import DatePicker from 'react-datepicker'; // Importar react-datepicker
-import 'react-datepicker/dist/react-datepicker.css'; // Estilos de react-datepicker
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import {
+  TEMPERATURA_CRITICA,
+  HUMEDAD_CRITICA,
+  CO2_CRITICO,
+  TEMPERATURA_DEFICIENTE,
+  HUMEDAD_DEFICIENTE,
+  CO2_DEFICIENTE,
+  TEMPERATURA_ACEPTABLE,
+  HUMEDAD_ACEPTABLE,
+  CO2_ACEPTABLE
+} from '../utilidades/constantes/metricas'; // Ajusta la ruta según tu estructura
 
 const Historial = () => {
   const [datos, setDatos] = useState([]);
   const [paginaActual, setPaginaActual] = useState(1);
   const [totalPaginas, setTotalPaginas] = useState(0);
-  const itemsPorPagina = 20; // 20 filas de datos agrupados
-  const [fechaSeleccionada, setFechaSeleccionada] = useState(null); // Estado para la fecha seleccionada
+  const itemsPorPagina = 20;
+  const [fechaSeleccionada, setFechaSeleccionada] = useState(null);
   const token = getToken();
 
   useEffect(() => {
@@ -20,12 +31,11 @@ const Historial = () => {
 
   const fetchData = async () => {
     try {
-      const fechaFormatted = fechaSeleccionada ? fechaSeleccionada.toISOString().slice(0, 10) : ''; // Formato ISO de la fecha seleccionada
-
+      const fechaFormatted = fechaSeleccionada ? fechaSeleccionada.toISOString().slice(0, 10) : '';
       const response = await PeticionGet(token, `/datosBusqueda?pagina=${paginaActual}&items=${itemsPorPagina}&fecha=${fechaFormatted}`);
       const historialAgrupado = agruparDatos(response.info);
       setDatos(historialAgrupado);
-      setTotalPaginas(Math.ceil(response.total / (itemsPorPagina * 3))); // Ajustar total de páginas
+      setTotalPaginas(Math.ceil(response.total / (itemsPorPagina * 3)));
     } catch (error) {
       console.error(error);
     }
@@ -44,8 +54,8 @@ const Historial = () => {
   };
 
   const handleFechaSeleccionada = (date) => {
-    setFechaSeleccionada(date); // Actualizar la fecha seleccionada
-    setPaginaActual(1); // Reiniciar la página actual al seleccionar una nueva fecha jajaj
+    setFechaSeleccionada(date);
+    setPaginaActual(1);
   };
 
   const agruparDatos = (datos) => {
@@ -59,18 +69,30 @@ const Historial = () => {
         historialAgrupado[key][dato.id_sensor - 1] = dato.dato;
       }
     });
-  
+
     return Object.keys(historialAgrupado).map((key) => {
+      const [humedad, temperatura, co2] = historialAgrupado[key];
       return {
         fechaHora: key,
-        temperatura: historialAgrupado[key][1],
-        humedad: historialAgrupado[key][0],
-        co2: historialAgrupado[key][2],
-        estadoAula: 'Por definir',
+        temperatura: temperatura,
+        humedad: humedad,
+        co2: co2,
+        estadoAula: determinarNivelGeneral(parseFloat(temperatura), parseFloat(humedad), parseFloat(co2)),
       };
     });
   };
-  
+
+  const determinarNivelGeneral = (temperatura, humedad, co2) => {
+    if (temperatura > TEMPERATURA_CRITICA || humedad > HUMEDAD_CRITICA || co2 > CO2_CRITICO) {
+      return 'Crítico';
+    } else if (temperatura > TEMPERATURA_DEFICIENTE || humedad > HUMEDAD_DEFICIENTE || co2 > CO2_DEFICIENTE) {
+      return 'Deficiente';
+    } else if (temperatura > TEMPERATURA_ACEPTABLE || humedad > HUMEDAD_ACEPTABLE || co2 > CO2_ACEPTABLE) {
+      return 'Aceptable';
+    } else {
+      return 'Óptimo';
+    }
+  };
 
   return (
     <div>
@@ -86,10 +108,10 @@ const Historial = () => {
               <DatePicker
                 selected={fechaSeleccionada}
                 onChange={handleFechaSeleccionada}
-                dateFormat="dd/MM/yyyy" // Formato de la fecha a mostrar
-                isClearable // Permite borrar la fecha seleccionada
-                placeholderText="Seleccione una fecha" // Texto del placeholder
-                className="form-control" // Clase CSS para el input
+                dateFormat="dd/MM/yyyy"
+                isClearable
+                placeholderText="Seleccione una fecha"
+                className="form-control"
               />
             </div>
           </div>

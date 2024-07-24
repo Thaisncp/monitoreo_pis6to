@@ -63,7 +63,7 @@ const Registro = () => {
                                         <div className="card-body">
                                             <div className="container">
                                                 <form className="row g-3" onSubmit={handleSubmit(onSubmit)}>
-                                                    <div className="col-md-6">
+                                                   <div className="col-md-6">
                                                         <div className={`input-field form-outline`}>
                                                             <em className="far fa-user"></em>
                                                             <input type="text" className="form-control" placeholder="Nombres" {...register('nombres', {

@@ -31,7 +31,7 @@ export const Conocenos = () => {
                 <div className="p-4">
                   <h4 className='texto-primario-h2'>MISIÓN DEL PROYECTO</h4>
                   <p style={{ textAlign: 'justify' }}>
-                  Nuestra misión es desarrollar e implementar una estación integrada de monitoreo ambiental en tiempo real para el Aula Magna de la Universidad Nacional de Loja (UNL), a través de una aplicación web. Nos dedicamos a proporcionar una solución tecnológica innovadora y precisa para la recolección, análisis y visualización en tiempo real de datos críticos como calor, temperatura, humedad y niveles de CO2.
+                  Nuestra misión es desarrollar e implementar una estación integrada de monitoreo ambiental en tiempo real para el Aula Magna de la Universidad Nacional de Loja (UNL), a través de una aplicación web. Nos dedicamos a proporcionar una solución tecnológica innovadora y precisa para la recolección, análisis y visualización en tiempo real de datos críticos como temperatura, humedad y niveles de CO2.
                   Nuestro compromiso es facilitar la toma de decisiones fundamentadas para optimizar las condiciones ambientales del Aula Magna, garantizando así el confort y la seguridad de estudiantes y personal docente. A través de nuestra plataforma accesible, buscamos empoderar a docentes, estudiantes y autoridades universitarias con información ambiental crucial, promoviendo un entorno de aprendizaje saludable, eficiente y consciente del medio ambiente.
                   </p>
                 </div>
@@ -61,28 +61,28 @@ export const Conocenos = () => {
           <div className='crud shadow-lg p-2 '>
             <div className="services" style={{ marginTop: 60 + 'px' }}>
               <div className="service">
-                <a href={miembro1} target="_blank"><img className='miembro' src={miembro1} alt="img"></img></a>
+                {/**<a href={miembro1} target="_blank"><img className='miembro' src={miembro1} alt="img"></img></a>*/}
                 <h3><a href="https://github.com/Thaisncp" style={{ color: '#36ab2b' }} target="_blank">THAIS CARTUCHE</a></h3>
                 <h4>Líder del equipo</h4> <br />
                 thais.cartuche@unl.edu.ec <br />
                 +593 99 065 4321 <br />
               </div>
               <div className="service">
-                <a href={miembro2} target="_blank"><img className='miembro' src={miembro2} alt="img"></img></a>
+                {/**<a href={miembro2} target="_blank"><img className='miembro' src={miembro2} alt="img"></img></a>*/}
                 <h3><a href="https://github.com/luisNarvaez20" style={{ color: '#36ab2b' }} target="_blank">LUIS NARVAEZ</a></h3>
                 <h4>Miembro del equipo</h4> <br />
                 luis.a.narvaez@unl.edu.ec <br />
                 +593 98 367 2082 <br />
               </div>
               <div className="service">
-                <a href={miembro3} target="_blank"><img className='miembro' src={miembro3} alt="img"></img></a>
+                {/**<a href={miembro3} target="_blank"><img className='miembro' src={miembro3} alt="img"></img></a>*/}
                 <h3><a href="https://github.com/lettcriss2003" style={{ color: '#36ab2b' }} target="_blank">LETTY ROJAS</a></h3>
                 <h4>Miembro del equipo</h4> <br />
                 letty.rojas@unl.edu.ec <br />
                 +593 98 790 2694 <br />
               </div>
               <div className="service">
-                <a href={miembro4} target="_blank"><img className='miembro' src={miembro4} alt="img"></img></a>
+                {/**<a href={miembro4} target="_blank"><img className='miembro' src={miembro4} alt="img"></img></a>*/}
                 <h3><a href="https://github.com/Maryuri931" style={{ color: '#36ab2b' }} target="_blank">MARYURI CONDOY</a></h3>
                 <h4>Miembro del equipo</h4> <br />
                 mayuri.condoy@unl.edu.ec <br />

@@ -4,12 +4,13 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { PeticionGetSinToken } from '../hooks/Conexion';
 import * as metricas from '../utilidades/constantes/metricas';
 import { TIMEREFETCHING } from '../utilidades/constantes/refetching';
+
 export const Indicador = () => {
     const [nivelGeneral, setNivelGeneral] = useState();
 
     useEffect(() => {
         const fetchData = () => {
-            PeticionGetSinToken('/datos/ultimosDatos').then(response => {
+            PeticionGetSinToken('datos/ultimosDatos').then(response => {
                 const { temperatura, humedad, co2 } = response.info;
                 const tempValue = parseFloat(temperatura.dato);
                 const humedadValue = parseFloat(humedad.dato);
@@ -44,10 +45,12 @@ export const Indicador = () => {
                 value={nivelGeneral}
                 exclusive
                 aria-label="Indicador General"
+                style={{ display: 'flex', justifyContent: 'space-between' }}
             >
                 <ToggleButton
                     value="Óptimo"
                     disabled={nivelGeneral !== 'Óptimo'}
+                    style={{ flex: 1, margin: '0 5px', minWidth: '200px' }}
                     className={`btn ${nivelGeneral === 'Óptimo' ? 'bg-success text-white' : ''}`}
                 >
                     Óptimo
@@ -55,6 +58,7 @@ export const Indicador = () => {
                 <ToggleButton
                     value="Aceptable"
                     disabled={nivelGeneral !== 'Aceptable'}
+                    style={{ flex: 1, margin: '0 5px', minWidth: '200px' }}
                     className={`btn ${nivelGeneral === 'Aceptable' ? 'bg-info text-white' : ''}`}
                 >
                     Aceptable
@@ -62,6 +66,7 @@ export const Indicador = () => {
                 <ToggleButton
                     value="Deficiente"
                     disabled={nivelGeneral !== 'Deficiente'}
+                    style={{ flex: 1, margin: '0 5px', minWidth: '200px' }}
                     className={`btn ${nivelGeneral === 'Deficiente' ? 'bg-warning text-dark' : ''}`}
                 >
                     Deficiente
@@ -69,6 +74,7 @@ export const Indicador = () => {
                 <ToggleButton
                     value="Crítico"
                     disabled={nivelGeneral !== 'Crítico'}
+                    style={{ flex: 1, margin: '0 5px', minWidth: '200px' }}
                     className={`btn ${nivelGeneral === 'Crítico' ? 'bg-danger text-white' : ''}`}
                 >
                     Crítico

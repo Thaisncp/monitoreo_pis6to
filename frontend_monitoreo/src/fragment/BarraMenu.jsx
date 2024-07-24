@@ -73,8 +73,9 @@ const NavLink = ({ classNameNav, handleShowModal }) => {
             {token && (<Nav.Link href="/perfil" style={navLinkStyle}><i className="fas fa-user"></i> Perfil</Nav.Link>)}
             {token && (<Nav.Link href="/graficas" style={navLinkStyle}><i class="fas fa-chart-column"></i> Gráficas</Nav.Link>)}
             {token && (<Nav.Link href="/historial" style={navLinkStyle}><i class="fas fa-folder-open"></i> Historial</Nav.Link>)}
-            {token && (<Nav.Link href="/conocenos" style={navLinkStyle}><i class="fas fa-info-circle"></i> Conócenos</Nav.Link>)}
             {rolA === 'ADMINISTRADOR' && <Nav.Link href="/usuarios" style={navLinkStyle}><i className="fas fa-users"></i> Usuarios</Nav.Link>}
+            {rolA === 'ADMINISTRADOR' && <Nav.Link href="/sensores" style={navLinkStyle}><i className="fas fa-microchip"></i> Sensores</Nav.Link>}
+            {token && (<Nav.Link href="/conocenos" style={navLinkStyle}><i class="fas fa-info-circle"></i> Conócenos</Nav.Link>)}
             {!token && (
                 <li className="nav-item dropdown" onClick={toggleDropdown}>
                     <span className="nav-link" style={navLinkStyle}><i className="fas fa-user-circle"></i> Mi cuenta</span>

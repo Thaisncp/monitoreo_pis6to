@@ -13,6 +13,8 @@ const EventoController = require('../controls/EventoController');
 var eventoController = new EventoController();
 const DatosController = require('../controls/DatosController');
 var datosController = new DatosController();
+const SensorController = require('../controls/SensorController');
+var sensorController = new SensorController();
 
 /* GET users listing. */
 router.get('/', function (req, res, next) {
@@ -95,5 +97,11 @@ router.get('/datos', auth, datosController.listarDatos);
 router.get('/datosBusqueda', auth, datosController.listarDatosBusqueda);
 router.get('/datos/ultimosDatos', datosController.obtenerUltimosDatos);
 router.post('/chatbot', datosController.chatbotResponse.bind(datosController));
-
+router.get('/datos/promedio', datosController.PromedioDiario);
+/**SENSOR CONTROLLER */
+router.get('/sensor/listar', auth, sensorController.listar);
+router.get('/sensor/listarActivo', auth, sensorController.listarActivo);
+router.get('/sensor/listarInactivo', auth, sensorController.listarInactivo);
+router.post('/sensor/modificar', auth,sensorController.modificar);
+router.post('/sensor/guardar', auth, sensorController.guardar);
 module.exports = router;
