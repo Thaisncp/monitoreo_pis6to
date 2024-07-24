@@ -12,20 +12,17 @@ const ValoresSensores = () => {
         const fetchData = () => {
             PeticionGetSinToken('/datos/ultimosDatos').then(response => {
                 const { temperatura, humedad, co2 } = response.info;
-                const newData = {
-                    temperatura: Math.max(0, Math.min(1, parseFloat(temperatura.dato) / 100)), // Clamping and converting to range 0-1
-                    humedad: Math.max(0, Math.min(1, parseFloat(humedad.dato) / 100)),       // Clamping and converting to range 0-1
-                    co2: Math.max(0, Math.min(1, parseFloat(co2.dato) / 100)),               // Clamping and converting to range 0-1
-                };
-                setData(newData);
+                setData({
+                    temperatura: parseFloat(temperatura.dato),
+                    humedad: parseFloat(humedad.dato),
+                    co2: parseFloat(co2.dato)
+                });
                 setIsLoading(false);
             });
         };
 
         fetchData();
-
         const interval = setInterval(fetchData, TIMEREFETCHING);
-
         return () => clearInterval(interval);
     }, []);
 
@@ -69,7 +66,7 @@ const ValoresSensores = () => {
                             id="gauge-temperatura"
                             percent={calculatePercent(data.temperatura, 0, 50)}
                             colors={gaugeColors.temperatura}
-                            formatTextValue={() => `${(data.temperatura * 100).toFixed(2)}°`} // Convert back to original scale
+                            formatTextValue={() => `${data.temperatura.toFixed(2)}°`}
                         />
                     </div>
                     <div className="text-center m-2">
@@ -79,7 +76,7 @@ const ValoresSensores = () => {
                             id="gauge-humedad"
                             percent={calculatePercent(data.humedad, 0, 100)}
                             colors={gaugeColors.humedad}
-                            formatTextValue={() => `${(data.humedad * 100).toFixed(2)}%`} // Convert back to original scale
+                            formatTextValue={() => `${data.humedad.toFixed(2)}%`}
                         />
                     </div>
                     <div className="text-center m-2">
@@ -89,7 +86,7 @@ const ValoresSensores = () => {
                             id="gauge-co2"
                             percent={calculatePercent(data.co2, 0, 1200)}
                             colors={gaugeColors.co2}
-                            formatTextValue={() => `${(data.co2 * 100).toFixed(2)} ppm`} // Convert back to original scale
+                            formatTextValue={() => `${data.co2.toFixed(2)} ppm`} 
                         />
                     </div>
                 </div>

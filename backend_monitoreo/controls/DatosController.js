@@ -287,14 +287,91 @@ class DatosController {
         try {
             const { message } = req.body;
             let response = "";
-
+    
             const contienePalabras = (msg, palabras) => palabras.some(palabra => msg.toLowerCase().includes(palabra));
-
+    
             const palabrasTemperatura = ['temperatura', 'calor', 'frío', 'grados'];
             const palabrasHumedad = ['humedad', 'húmedo', 'seco'];
             const palabrasCO2 = ['co2', 'dióxido de carbono', 'aire'];
-
-            if (contienePalabras(message, palabrasTemperatura)) {
+            const palabrasFecha = ['fecha', 'día', 'ayer', 'hoy', 'mes', 'semana'];
+            const palabrasPromedio = ['promedio', 'media', 'promedios'];
+    
+            console.log('Mensaje recibido:', message); // Log para depuración
+    
+            // Función para obtener la fecha del último registro
+            const obtenerUltimaFecha = async () => {
+                const resultado = await datoRecolectado.findOne({
+                    attributes: [
+                        [datoRecolectado.sequelize.fn('MAX', datoRecolectado.sequelize.col('fecha')), 'fecha']
+                    ],
+                    raw: true
+                });
+                return resultado ? resultado.fecha : null;
+            };
+    
+            // Función para calcular los promedios
+            const calcularPromedios = async (fecha) => {
+                if (!fecha) throw new Error('Fecha no disponible');
+    
+                const [promedioTemperatura, promedioHumedad, promedioCo2] = await Promise.all([
+                    datoRecolectado.findOne({
+                        attributes: [
+                            [datoRecolectado.sequelize.fn('AVG', datoRecolectado.sequelize.col('dato')), 'promedio']
+                        ],
+                        where: {
+                            id_sensor: 2, // temperatura
+                            fecha: fecha
+                        },
+                        raw: true
+                    }),
+                    datoRecolectado.findOne({
+                        attributes: [
+                            [datoRecolectado.sequelize.fn('AVG', datoRecolectado.sequelize.col('dato')), 'promedio']
+                        ],
+                        where: {
+                            id_sensor: 1, // humedad
+                            fecha: fecha
+                        },
+                        raw: true
+                    }),
+                    datoRecolectado.findOne({
+                        attributes: [
+                            [datoRecolectado.sequelize.fn('AVG', datoRecolectado.sequelize.col('dato')), 'promedio']
+                        ],
+                        where: {
+                            id_sensor: 3, // co2
+                            fecha: fecha
+                        },
+                        raw: true
+                    })
+                ]);
+    
+                return {
+                    temperatura: promedioTemperatura ? promedioTemperatura.promedio : 'N/A',
+                    humedad: promedioHumedad ? promedioHumedad.promedio : 'N/A',
+                    co2: promedioCo2 ? promedioCo2.promedio : 'N/A'
+                };
+            };
+    
+            if (contienePalabras(message, palabrasPromedio)) {
+                try {
+                    const fechaUltimoRegistro = await obtenerUltimaFecha();
+                    const promedios = await calcularPromedios(fechaUltimoRegistro);
+                    console.log('Promedios generales:', promedios); // Log para depuración
+                    
+                    if (contienePalabras(message, palabrasTemperatura)) {
+                        response = `El promedio de temperatura del día es ${promedios.temperatura} °C.`;
+                    } else if (contienePalabras(message, palabrasHumedad)) {
+                        response = `El promedio de humedad del día es ${promedios.humedad} %.`;
+                    } else if (contienePalabras(message, palabrasCO2)) {
+                        response = `El promedio de CO2 del día es ${promedios.co2} ppm.`;
+                    } else {
+                        response = `El promedio de los datos del día es:\n- Temperatura: ${promedios.temperatura} °C\n- Humedad: ${promedios.humedad} %\n- CO2: ${promedios.co2} ppm.`;
+                    }
+                } catch (error) {
+                    response = "Hubo un error al obtener el promedio de los datos. Por favor, intenta de nuevo más tarde.";
+                }
+            } else if (contienePalabras(message, palabrasTemperatura)) {
                 const temperatura = await this.obtenerUltimaTemperatura();
                 response = `La temperatura actual es ${temperatura}°C. `;
                 if (temperatura > 25) {
@@ -324,6 +401,8 @@ class DatosController {
                 } else {
                     response += "Los niveles de CO2 están dentro de un rango normal.";
                 }
+            } else if (contienePalabras(message, palabrasFecha)) {
+                response = "Para consultar datos de una fecha específica, por favor dirígete a la sección de historial. Recuerda que para acceder a esta sección es necesario iniciar sesión.";
             } else if (message.toLowerCase().includes("clima") || message.toLowerCase().includes("ambiente")) {
                 const [temperatura, humedad, co2] = await Promise.all([
                     this.obtenerUltimaTemperatura(),
@@ -342,41 +421,18 @@ class DatosController {
             } else {
                 response = "Lo siento, no estoy seguro de cómo responder a eso. Puedes preguntarme sobre la temperatura, humedad, niveles de CO2 o el ambiente en general. También puedes pedirme ayuda si no estás seguro de qué preguntar.";
             }
-
+    
+            console.log('Respuesta del chatbot:', response); // Log para depuración
+    
             res.json({ msg: 'OK!', code: 200, response });
         } catch (error) {
             console.error('Error en la respuesta del chatbot:', error);
             res.status(500).json({ msg: 'Error en la respuesta del chatbot', code: 500 });
         }
     }
-
-    async obtenerUltimaTemperatura() {
-        const data = await datoRecolectado.findOne({
-            attributes: ['dato'],
-            where: { id_sensor: 2 },
-            order: [['fecha', 'DESC'], ['hora', 'DESC']]
-        });
-        return data ? data.dato : 'N/A';
-    }
-
-    async obtenerUltimaHumedad() {
-        const data = await datoRecolectado.findOne({
-            attributes: ['dato'],
-            where: { id_sensor: 1 },
-            order: [['fecha', 'DESC'], ['hora', 'DESC']]
-        });
-        return data ? data.dato : 'N/A';
-    }
-
-    async obtenerUltimoCo2() {
-        const data = await datoRecolectado.findOne({
-            attributes: ['dato'],
-            where: { id_sensor: 3 },
-            order: [['fecha', 'DESC'], ['hora', 'DESC']]
-        });
-        return data ? data.dato : 'N/A';
-    }
-
+    
+      
+    
     async PromedioDiario(req, res) {
         try {
             // Obtener la fecha del último registro
@@ -441,7 +497,33 @@ class DatosController {
             res.status(500).json({ msg: 'Error al obtener promedio diario', code: 500 });
         }
     }
-    
 
+    async obtenerUltimaTemperatura() {
+        const data = await datoRecolectado.findOne({
+            attributes: ['dato'],
+            where: { id_sensor: 2 },
+            order: [['fecha', 'DESC'], ['hora', 'DESC']]
+        });
+        return data ? data.dato : 'N/A';
+    }
+
+    async obtenerUltimaHumedad() {
+        const data = await datoRecolectado.findOne({
+            attributes: ['dato'],
+            where: { id_sensor: 1 },
+            order: [['fecha', 'DESC'], ['hora', 'DESC']]
+        });
+        return data ? data.dato : 'N/A';
+    }
+
+    async obtenerUltimoCo2() {
+        const data = await datoRecolectado.findOne({
+            attributes: ['dato'],
+            where: { id_sensor: 3 },
+            order: [['fecha', 'DESC'], ['hora', 'DESC']]
+        });
+        return data ? data.dato : 'N/A';
+    }
+    
 }
 module.exports = DatosController;
