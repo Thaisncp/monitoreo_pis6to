@@ -1,16 +1,13 @@
-import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { PeticionPost } from '../hooks/Conexion';
-import { useNavigate } from 'react-router';
-import mensajes from '../utilidades/Mensajes';
 import logo from '../logo.png';
+import mensajes from '../utilidades/Mensajes';
 import { getToken } from '../utilidades/Sessionutil';
 
 const RegistroSensor = () => {
-    const navigate = useNavigate();
     const { register, handleSubmit, formState: { errors } } = useForm();
-    const [isLoading, setIsLoading] = useState(false);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [formData, setFormData] = useState({});
 
@@ -20,7 +17,6 @@ const RegistroSensor = () => {
     };
 
     const handleConfirm = () => {
-        setIsLoading(true);
         setShowConfirmModal(false);
         mensajes('Guardando información...', 'info', 'Información');
 

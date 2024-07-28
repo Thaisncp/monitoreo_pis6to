@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import BarraMenu from './BarraMenu';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { PeticionGet } from '../hooks/Conexion';
@@ -25,40 +25,7 @@ const Historial = () => {
   const [fechaSeleccionada, setFechaSeleccionada] = useState(null);
   const token = getToken();
 
-  useEffect(() => {
-    fetchData();
-  }, [paginaActual, fechaSeleccionada]);
-
-  const fetchData = async () => {
-    try {
-      const fechaFormatted = fechaSeleccionada ? fechaSeleccionada.toISOString().slice(0, 10) : '';
-      const response = await PeticionGet(token, `/datosBusqueda?pagina=${paginaActual}&items=${itemsPorPagina}&fecha=${fechaFormatted}`);
-      const historialAgrupado = agruparDatos(response.info);
-      setDatos(historialAgrupado);
-      setTotalPaginas(Math.ceil(response.total / (itemsPorPagina * 3)));
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handlePaginaAnterior = () => {
-    if (paginaActual > 1) {
-      setPaginaActual(paginaActual - 1);
-    }
-  };
-
-  const handlePaginaSiguiente = () => {
-    if (paginaActual < totalPaginas) {
-      setPaginaActual(paginaActual + 1);
-    }
-  };
-
-  const handleFechaSeleccionada = (date) => {
-    setFechaSeleccionada(date);
-    setPaginaActual(1);
-  };
-
-  const agruparDatos = (datos) => {
+  const agruparDatos = useCallback((datos) => {
     const historialAgrupado = {};
     datos.forEach((dato) => {
       const key = `${dato.fecha} ${dato.hora}`;
@@ -80,7 +47,7 @@ const Historial = () => {
         estadoAula: determinarNivelGeneral(parseFloat(temperatura), parseFloat(humedad), parseFloat(co2)),
       };
     });
-  };
+  }, []);
 
   const determinarNivelGeneral = (temperatura, humedad, co2) => {
     if (temperatura > TEMPERATURA_CRITICA || humedad > HUMEDAD_CRITICA || co2 > CO2_CRITICO) {
@@ -92,6 +59,39 @@ const Historial = () => {
     } else {
       return 'Óptimo';
     }
+  };
+
+  const fetchData = useCallback(async () => {
+    try {
+      const fechaFormatted = fechaSeleccionada ? fechaSeleccionada.toISOString().slice(0, 10) : '';
+      const response = await PeticionGet(token, `/datosBusqueda?pagina=${paginaActual}&items=${itemsPorPagina}&fecha=${fechaFormatted}`);
+      const historialAgrupado = agruparDatos(response.info);
+      setDatos(historialAgrupado);
+      setTotalPaginas(Math.ceil(response.total / (itemsPorPagina * 3)));
+    } catch (error) {
+      console.error(error);
+    }
+  }, [paginaActual, fechaSeleccionada, token, agruparDatos]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  const handlePaginaAnterior = () => {
+    if (paginaActual > 1) {
+      setPaginaActual(paginaActual - 1);
+    }
+  };
+
+  const handlePaginaSiguiente = () => {
+    if (paginaActual < totalPaginas) {
+      setPaginaActual(paginaActual + 1);
+    }
+  };
+
+  const handleFechaSeleccionada = (date) => {
+    setFechaSeleccionada(date);
+    setPaginaActual(1);
   };
 
   return (
