@@ -147,11 +147,6 @@ void actualizarDatos() {
     lastCo2 = g;
   } else {
     lastCo2 = 0.0;
-    //float minRange = 50.0;
-    //float maxRange = 200.0;
-    //int randomValue = random(0, 15101);
-    //g = minRange + (float)randomValue / 100.0;
-    //lastCo2 = g;
     Serial.print("Error humedad: ");
     Serial.println(lastCo2);
   }
