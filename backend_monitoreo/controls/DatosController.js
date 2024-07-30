@@ -374,32 +374,38 @@ class DatosController {
             } else if (contienePalabras(message, palabrasTemperatura)) {
                 const temperatura = await this.obtenerUltimaTemperatura();
                 response = `La temperatura actual es ${temperatura}°C. `;
-                if (temperatura > 25) {
-                    response += "Está bastante caluroso hoy.";
-                } else if (temperatura < 15) {
-                    response += "Hace un poco de frío hoy.";
+                if (temperatura >= 18 && temperatura <= 24) {
+                    response += "La calidad del aire es óptima en cuanto a temperatura.";
+                } else if ((temperatura >= 16 && temperatura < 18) || (temperatura > 24 && temperatura <= 26)) {
+                    response += "La calidad del aire es buena en cuanto a temperatura.";
+                } else if ((temperatura >= 14 && temperatura < 16) || (temperatura > 26 && temperatura <= 28)) {
+                    response += "La calidad del aire es moderada en cuanto a temperatura. Se recomiendan acciones para mejorarla.";
                 } else {
-                    response += "La temperatura es agradable.";
+                    response += "La calidad del aire es pésima en cuanto a temperatura. Es necesario tomar medidas como ajustar la climatización.";
                 }
             } else if (contienePalabras(message, palabrasHumedad)) {
                 const humedad = await this.obtenerUltimaHumedad();
                 response = `La humedad actual es ${humedad}%. `;
-                if (humedad > 60) {
-                    response += "El ambiente está bastante húmedo.";
-                } else if (humedad < 30) {
-                    response += "El aire está bastante seco.";
+                if (humedad >= 40 && humedad <= 50) {
+                    response += "La calidad del aire es óptima en cuanto a humedad.";
+                } else if (humedad > 50 && humedad <= 60) {
+                    response += "La calidad del aire es buena en cuanto a humedad.";
+                } else if (humedad > 60 && humedad <= 70) {
+                    response += "La calidad del aire es moderada en cuanto a humedad. Se recomiendan acciones para mejorarla.";
                 } else {
-                    response += "La humedad está en un nivel confortable.";
+                    response += "La calidad del aire es pésima en cuanto a humedad. Es necesario tomar medidas como ajustar la ventilación.";
                 }
             } else if (contienePalabras(message, palabrasCO2)) {
                 const co2 = await this.obtenerUltimoCo2();
                 response = `El nivel actual de CO2 es ${co2} ppm. `;
-                if (co2 > 1000) {
-                    response += "Los niveles de CO2 son altos, sería recomendable ventilar el área.";
-                } else if (co2 < 400) {
-                    response += "Los niveles de CO2 son excelentes.";
+                if (co2 >= 0 && co2 <= 400) {
+                    response += "La calidad del aire es óptima en cuanto a niveles de CO2.";
+                } else if (co2 > 400 && co2 <= 600) {
+                    response += "La calidad del aire es buena en cuanto a niveles de CO2.";
+                } else if (co2 > 600 && co2 <= 800) {
+                    response += "La calidad del aire es moderada en cuanto a niveles de CO2. Se recomienda ventilar el área.";
                 } else {
-                    response += "Los niveles de CO2 están dentro de un rango normal.";
+                    response += "La calidad del aire es pésima en cuanto a niveles de CO2. Es necesario ventilar inmediatamente y considerar reducir el aforo.";
                 }
             } else if (contienePalabras(message, palabrasFecha)) {
                 response = "Para consultar datos de una fecha específica, por favor dirígete a la sección de historial. Recuerda que para acceder a esta sección es necesario iniciar sesión.";
